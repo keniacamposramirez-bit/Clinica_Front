@@ -1,64 +1,99 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Layout from './components/layout/Layout';
-import { Spinner } from './components/ui/UI';
+import { useState } from 'react'
+import Login from './components/Login'
+import Pacientes from './components/Pacientes'
+import Doctores from './components/Doctores'
+import Medicamentos from './components/Medicamentos'
+import Citas from './components/Citas'
+import { initialPacientes, initialDoctores, initialMedicamentos, initialCitas } from './data/store'
+import './App.css'
 
-// Pages (lazy-loaded for better perf)
-import LoginPage          from './pages/Login';
-import Dashboard          from './pages/Dashboard';
-import PacientesPage      from './pages/Pacientes';
-import CitasPage          from './pages/Citas';
-import DoctoresPage       from './pages/Doctores';
-import ExpedientesPage    from './pages/Expedientes';
-import RecetasPage        from './pages/Recetas';
-import NotificacionesPage from './pages/Notificaciones';
-import UsuariosPage       from './pages/Usuarios';
-import ConfiguracionPage  from './pages/Configuracion';
-
-function PrivateRoute({ children }) {
-  const { user, loading } = useAuth();
-  if (loading) return (
-    <div style={{ height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--bg-base)' }}>
-      <Spinner size="lg" />
-    </div>
-  );
-  return user ? children : <Navigate to="/login" replace />;
-}
-
-function AppRoutes() {
-  const { user } = useAuth();
-  return (
-    <Routes>
-      <Route path="/login" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
-      <Route path="/*" element={
-        <PrivateRoute>
-          <Layout>
-            <Routes>
-              <Route path="/"               element={<Dashboard />} />
-              <Route path="/pacientes"      element={<PacientesPage />} />
-              <Route path="/citas"          element={<CitasPage />} />
-              <Route path="/doctores"       element={<DoctoresPage />} />
-              <Route path="/expedientes"    element={<ExpedientesPage />} />
-              <Route path="/recetas"        element={<RecetasPage />} />
-              <Route path="/notificaciones" element={<NotificacionesPage />} />
-              <Route path="/usuarios"       element={<UsuariosPage />} />
-              <Route path="/configuracion"  element={<ConfiguracionPage />} />
-              <Route path="*"               element={<Navigate to="/" replace />} />
-            </Routes>
-          </Layout>
-        </PrivateRoute>
-      } />
-    </Routes>
-  );
-}
+const ALL_TABS = [
+  { id: 'pacientes',    label: 'Pacientes',    icon: '👤', roles: ['admin', 'doctor', 'recep'] },
+  { id: 'doctores',     label: 'Doctores',     icon: '🩺', roles: ['admin'] },
+  { id: 'medicamentos', label: 'Medicamentos', icon: '💊', roles: ['admin'] },
+  { id: 'citas',        label: 'Citas',        icon: '📅', roles: ['admin', 'doctor', 'recep'] },
+]
 
 export default function App() {
+  const [session, setSession] = useState(null)
+  const [activeTab, setActiveTab] = useState('pacientes')
+  const [pacientes, setPacientes] = useState(initialPacientes)
+  const [doctores, setDoctores] = useState(initialDoctores)
+  const [medicamentos, setMedicamentos] = useState(initialMedicamentos)
+  const [citas, setCitas] = useState(initialCitas)
+
+  function handleLogin(user) {
+    setSession(user)
+    const tabs = ALL_TABS.filter(t => t.roles.includes(user.role))
+    setActiveTab(tabs[0].id)
+  }
+
+  function handleLogout() {
+    setSession(null)
+    setActiveTab('pacientes')
+  }
+
+  if (!session) return <Login onLogin={handleLogin} />
+
+  const tabs = ALL_TABS.filter(t => t.roles.includes(session.role))
+  const alertas = medicamentos.filter(m => m.stock === 0 || m.stock < m.min).length
+
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AuthProvider>
-  );
+    <div className="app">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <div className="brand-icon">✚</div>
+          <div>
+            <div className="brand-name">MediCare</div>
+            <div className="brand-sub">Sistema de Salud</div>
+          </div>
+        </div>
+        <nav className="sidebar-nav">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              className={`nav-item ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              <span className="nav-icon">{tab.icon}</span>
+              <span className="nav-label">{tab.label}</span>
+              {tab.id === 'medicamentos' && alertas > 0 && (
+                <span className="nav-badge">{alertas}</span>
+              )}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          <div className="user-card">
+            <div className="user-avatar">{session.icon}</div>
+            <div>
+              <div className="user-name">{session.label}</div>
+              <div className="user-role">{session.role === 'admin' ? 'Administrador' : session.role === 'doctor' ? 'Médico' : 'Recepcionista'}</div>
+            </div>
+          </div>
+          <button className="logout-btn" onClick={handleLogout}>Cerrar sesión</button>
+        </div>
+      </aside>
+
+      <main className="main">
+        <header className="topbar">
+          <div className="topbar-left">
+            <h1 className="page-title">
+              {tabs.find(t => t.id === activeTab)?.icon}{' '}
+              {tabs.find(t => t.id === activeTab)?.label}
+            </h1>
+            <span className="page-date">
+              {new Date().toLocaleDateString('es-SV', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            </span>
+          </div>
+        </header>
+        <div className="content">
+          {activeTab === 'pacientes'    && <Pacientes    data={pacientes}    setData={setPacientes} />}
+          {activeTab === 'doctores'     && <Doctores     data={doctores}     setData={setDoctores} />}
+          {activeTab === 'medicamentos' && <Medicamentos data={medicamentos} setData={setMedicamentos} />}
+          {activeTab === 'citas'        && <Citas        data={citas}        setData={setCitas} pacientes={pacientes} doctores={doctores} />}
+        </div>
+      </main>
+    </div>
+  )
 }
