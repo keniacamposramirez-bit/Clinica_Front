@@ -1,0 +1,72 @@
+.root { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+
+.header { margin-bottom: 28px; }
+.title  { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: var(--text-primary); }
+.date   { font-size: 0.85rem; color: var(--text-muted); margin-top: 3px; text-transform: capitalize; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 18px;
+}
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+.citasCard, .doctoresCard { }
+
+.cardHeader { margin-bottom: 16px; }
+.cardTitle  {
+  font-family: var(--font-display);
+  font-size: 0.95rem; font-weight: 700;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.loading { display: flex; justify-content: center; padding: 40px; }
+.empty   { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 32px; }
+
+/* Citas list */
+.citasList { display: flex; flex-direction: column; gap: 2px; }
+.citaRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  transition: background 0.15s;
+}
+.citaRow:hover { background: var(--bg-elevated); }
+.citaTime {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.775rem; color: var(--text-muted);
+  min-width: 90px; flex-shrink: 0;
+}
+.citaInfo { flex: 1; min-width: 0; }
+.citaPaciente { font-size: 0.85rem; font-weight: 500; color: var(--text-primary); display: block; truncate: ellipsis; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.citaDoctor   { font-size: 0.775rem; color: var(--text-secondary); }
+
+/* Doctors list */
+.doctoresList { display: flex; flex-direction: column; gap: 2px; }
+.doctorRow {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 8px; border-radius: var(--radius-md);
+  transition: background 0.15s;
+}
+.doctorRow:hover { background: var(--bg-elevated); }
+.doctorAvatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.doctorName { font-size: 0.85rem; font-weight: 500; color: var(--text-primary); }
+.doctorSpec { font-size: 0.775rem; color: var(--text-secondary); }

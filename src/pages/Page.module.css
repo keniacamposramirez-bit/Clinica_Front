@@ -1,0 +1,41 @@
+.root { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+
+/* Row actions */
+.rowActions { display: flex; gap: 4px; }
+.actionBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 5px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.actionBtn:hover { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-bright); }
+.actionBtn.danger:hover { background: var(--danger-glow); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+
+/* Form grid */
+.form { display: flex; flex-direction: column; gap: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+@media (max-width: 700px) { .grid3 { grid-template-columns: 1fr 1fr; } }
+
+.modalFooter {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding-top: 8px; margin-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+/* Detail view */
+.detailGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 480px) { .detailGrid { grid-template-columns: 1fr; } }
+.detailField { display: flex; flex-direction: column; gap: 3px; }
+.detailLabel { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+.detailValue { font-size: 0.9rem; color: var(--text-primary); }
+
+/* Delete */
+.deleteText { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+.deleteText strong { color: var(--text-primary); }
