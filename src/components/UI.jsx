@@ -1,60 +1,181 @@
+/// Componente Avatar
 export function Avatar({ name, index }) {
-  const colors = ['av-teal','av-blue','av-coral','av-purple','av-amber']
+
+  // Colores disponibles para los avatares
+  const colors = [
+    'av-teal',
+    'av-blue',
+    'av-coral',
+    'av-purple',
+    'av-amber'
+  ]
+
   const parts = name.trim().split(' ')
-  const initials = (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase()
-  return <div className={`avatar ${colors[index % 5]}`}>{initials}</div>
+
+  const initials =
+    (parts[0][0] + (parts[1] ? parts[1][0] : ''))
+      .toUpperCase()
+
+  // Retorna el avatar con color dinámico
+  return (
+    <div className={`avatar ${colors[index % 5]}`}>
+      {initials}
+    </div>
+  )
 }
 
+
+// Muestra etiquetas de estado con color.
 export function Pill({ label, type }) {
-  return <span className={`pill pill-${type}`}>{label}</span>
+  return (
+    <span className={`pill pill-${type}`}>
+      {label}
+    </span>
+  )
 }
 
+
+// Tarjeta utilizada para mostrar estadísticas en el dashboard.
 export function StatCard({ icon, label, value, sub }) {
+
   return (
+
     <div className="stat-card">
-      <div className="stat-icon">{icon}</div>
-      <div className="stat-value">{value}</div>
-      <div className="stat-label">{label}</div>
-      {sub && <div className="stat-sub">{sub}</div>}
-    </div>
-  )
-}
 
-export function Modal({ open, onClose, title, children }) {
-  if (!open) return null
-  return (
-    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="modal">
-        <div className="modal-header">
-          <h2 className="modal-title">{title}</h2>
-          <button className="modal-close" onClick={onClose}>✕</button>
-        </div>
-        {children}
+      {/* Ícono de la tarjeta */}
+      <div className="stat-icon">
+        {icon}
       </div>
+
+      {/* Valor principal */}
+      <div className="stat-value">
+        {value}
+      </div>
+
+      {/* Título */}
+      <div className="stat-label">
+        {label}
+      </div>
+
+      {/* Texto secundario opcional */}
+      {sub && (
+        <div className="stat-sub">
+          {sub}
+        </div>
+      )}
+
     </div>
   )
 }
 
-export function FormField({ label, children }) {
+
+// Ventana emergente reutilizable para
+// formularios de crear o editar registros.
+
+export function Modal({
+  open,
+  onClose,
+  title,
+  children
+}) {
+
+ 
+  if (!open) return null
+
   return (
+
+    <div
+      className="modal-overlay"
+      onClick={e =>
+        e.target === e.currentTarget && onClose()
+      }
+    >
+
+      <div className="modal">
+
+        <div className="modal-header">
+
+          {/* Título del modal */}
+          <h2 className="modal-title">
+            {title}
+          </h2>
+
+          {/* Botón para cerrar */}
+          <button
+            className="modal-close"
+            onClick={onClose}
+          >
+            ✕
+          </button>
+
+        </div>
+
+        {/* Contenido dinámico */}
+        {children}
+
+      </div>
+
+    </div>
+  )
+}
+
+
+
+// Estructura para campos de formularios
+
+export function FormField({
+  label,
+  children
+}) {
+
+  return (
+
     <div className="form-field">
-      <label className="form-label">{label}</label>
+
+      {/* Etiqueta del campo */}
+      <label className="form-label">
+        {label}
+      </label>
+
+      {/* Input, select o textarea */}
       {children}
+
     </div>
   )
 }
 
-export function SearchBar({ value, onChange, placeholder }) {
+
+// Barra de búsqueda reutilizable.
+export function SearchBar({
+  value,
+  onChange,
+  placeholder
+}) {
+
   return (
+
     <div className="search-wrap">
-      <span className="search-icon"></span>
+
+      {/* Ícono de búsqueda */}
+      <span className="search-icon">
+      </span>
+
       <input
         className="search-input"
         type="text"
         value={value}
-        onChange={e => onChange(e.target.value)}
-        placeholder={placeholder || 'Buscar...'}
+
+        // Actualiza el valor de búsqueda
+        onChange={e =>
+          onChange(e.target.value)
+        }
+
+        // Texto por defecto
+        placeholder={
+          placeholder || 'Buscar...'
+        }
       />
+
     </div>
   )
 }

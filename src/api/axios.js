@@ -1,3 +1,5 @@
+// Importamos axios para poder hacer peticiones al backend de Laravel 
+
 import axios from 'axios';
 
 const api = axios.create({
@@ -16,4 +18,29 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-export default api;
+export default api; 
+
+// CÓDIGO UTILIZADO PARA PRUEBAS LOCALES
+
+// import axios from 'axios'
+
+// const api = axios.create({
+//   baseURL: 'http://127.0.0.1:8000/api',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'Accept': 'application/json'
+//   }
+// })
+
+// api.interceptors.request.use(config => {
+
+//   const token = localStorage.getItem('token')
+
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`
+//   }
+
+//   return config
+// })
+
+// export default api

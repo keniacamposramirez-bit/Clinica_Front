@@ -4,6 +4,7 @@ import api from '../api/axios'
 
 const empty = { nombre:'', descripcion:'', presentacion:'', estado:true }
 
+// COMPONENTE PRINCIPAL
 export default function Medicamentos() {
   const [data, setData]       = useState([])
   const [search, setSearch]   = useState('')
@@ -12,6 +13,7 @@ export default function Medicamentos() {
   const [editId, setEditId]   = useState(null)
   const [loading, setLoading] = useState(true)
 
+  // CARGAR MEDICAMENTOS AL INICIAR
   useEffect(() => { fetchMedicamentos() }, [])
 
   async function fetchMedicamentos() {
@@ -25,6 +27,7 @@ export default function Medicamentos() {
     }
   }
 
+  // FILTRO DE BÚSQUEDA
   const filtered = data.filter(m =>
     m.nombre.toLowerCase().includes(search.toLowerCase()) ||
     m.presentacion?.toLowerCase().includes(search.toLowerCase())
@@ -42,6 +45,7 @@ export default function Medicamentos() {
     setModal(true)
   }
 
+  // GUARDAR MEDICAMENTO
   async function save() {
     if (!form.nombre.trim()) return
     try {
@@ -57,6 +61,7 @@ export default function Medicamentos() {
     }
   }
 
+  // ELIMINAR MEDICAMENTO
   async function remove(id) {
     if (!confirm('¿Eliminar este medicamento?')) return
     try {
@@ -67,6 +72,7 @@ export default function Medicamentos() {
     }
   }
 
+  // ACTUALIZAR CAMPOS DEL FORMULARIO
   const f = (k, v) => setForm(prev => ({ ...prev, [k]: v }))
 
   if (loading) return <div className="module"><p>Cargando medicamentos...</p></div>
