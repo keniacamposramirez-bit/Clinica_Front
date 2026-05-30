@@ -39,7 +39,7 @@ export default function Tratamientos() {
     try {
       // EDITAR tratamiento
       if (editId) {          
-        await api.put(`/catalogos/tipos-tratamiento/${editId}`, form)
+        await api.put(/catalogos/tipos-tratamiento/${editId}, form)
       } else {
         // CREAR tratamiento
         await api.post('/catalogos/tipos-tratamiento', form)
@@ -60,7 +60,7 @@ async function remove(item) {
 
   try {
 
-    await api.put(`/catalogos/tipos-tratamiento/${item.id}`, {
+    await api.put(/catalogos/tipos-tratamiento/${item.id}, {
       nombre: item.nombre,
       descripcion: item.descripcion,
       estado: false

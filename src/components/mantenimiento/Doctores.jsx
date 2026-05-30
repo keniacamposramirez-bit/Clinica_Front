@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Avatar, Pill, StatCard, Modal, FormField, SearchBar } from '../UI'
 import api from "../../api/axios";
 
@@ -42,7 +41,7 @@ export default function Doctores() {
   }
 
   const filtered = data.filter(d =>
-    `${d.nombre} ${d.apellido}`.toLowerCase().includes(search.toLowerCase()) ||
+    ${d.nombre} ${d.apellido}.toLowerCase().includes(search.toLowerCase()) ||
     d.especialidad?.nombre?.toLowerCase().includes(search.toLowerCase())
   )
 
@@ -52,7 +51,6 @@ export default function Doctores() {
       nombre:          d.nombre,
       apellido:        d.apellido,
       id_especialidad: parseInt(d.id_especialidad),
-      num_registro:    d.num_registro,
       estado:          d.estado,
     })
     setEditId(d.id)
@@ -64,7 +62,7 @@ export default function Doctores() {
     if (!form.nombre.trim()) return
     try {
       if (editId) {
-        await api.put(`/doctores/${editId}`, form)
+        await api.put(/doctores/${editId}, form)
       } else {
         await api.post('/doctores', form)
       }
@@ -79,7 +77,7 @@ export default function Doctores() {
   async function remove(id) {
     if (!confirm('¿Eliminar este médico?')) return
     try {
-      await api.delete(`/doctores/${id}`)
+      await api.delete(/doctores/${id})
       fetchDoctores()
     } catch (e) {
       console.error('Error eliminando doctor', e)
@@ -119,7 +117,7 @@ export default function Doctores() {
               )}
               {filtered.map((d, i) => (
                 <tr key={d.id}>
-                  <td><div className="name-cell"><Avatar name={`${d.nombre} ${d.apellido}`} index={i} /><span>Dr. {d.nombre} {d.apellido}</span></div></td>
+                  <td><div className="name-cell"><Avatar name={${d.nombre} ${d.apellido}} index={i} /><span>Dr. {d.nombre} {d.apellido}</span></div></td>
                   <td><Pill label={d.especialidad?.nombre || '-'} type="teal" /></td>
                   <td>{d.num_registro}</td>
                   <td><Pill label={d.estado ? 'Activo' : 'Inactivo'} type={d.estado ? 'green' : 'red'} /></td>
